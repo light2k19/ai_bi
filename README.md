@@ -4,8 +4,9 @@ An AI-driven business-intelligence system for managers. Describe the analysis yo
 inspects your data sources, writes **read-only** queries, picks the visuals, lays out the page and can
 script animations. Pages always show live data — the AI writes queries and layout, never the numbers.
 
-**[Watch the 2-minute demo](demo/AI-BI-demo.mp4)**: a sales page is described in one sentence, built by the AI
-on the demo database, explored, refined by chat, saved, questioned and exported.
+![AI BI demo: a sales page described in one sentence, built by the AI on the demo database, explored, refined by chat, saved, questioned and exported](demo/AI-BI-demo.gif)
+
+**[Watch the 2-minute demo in full quality (MP4)](demo/AI-BI-demo.mp4)**
 
 - **Multi-project**: each project has its own members, roles, skills, data sources and pages.
 - **Skills** are the extension point: auth, data sources (MySQL, SQL Server, Oracle, PostgreSQL, SQLite, HTTP and GraphQL APIs),
@@ -84,7 +85,7 @@ apps/runtime    Sandboxed page runtime (separate origin): grid, filters, widgets
 packages/       page-spec (schema, validator, expressions), sql-guard, transforms, skill-sdk, runtime-api, cli
 skills/         20 built-in skills (manifest + AI instructions + server and/or client code)
 tools/          dev launcher, smoke/e2e/eval scripts, connector tests
-demo/           the demo video
+demo/           the demo video (GIF and MP4)
 ```
 
 ## Security model (summary)
