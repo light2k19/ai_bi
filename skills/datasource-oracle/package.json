@@ -1,0 +1,10 @@
+{
+  "name": "@aibi/skill-datasource-oracle",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@aibi/skill-sdk": "0.1.0",
+    "oracledb": "^6.7.0"
+  }
+}

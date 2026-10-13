@@ -1,0 +1,15 @@
+{
+  "name": "@aibi/cli",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "bin": { "aibi": "dist/aibi.mjs" },
+  "scripts": {
+    "build": "esbuild src/aibi.ts --bundle --platform=node --target=node20 --format=esm --outfile=dist/aibi.mjs --log-level=warning"
+  },
+  "dependencies": {
+    "@aibi/page-spec": "0.1.0",
+    "@aibi/transforms": "0.1.0",
+    "fflate": "^0.8.2"
+  }
+}

@@ -1,0 +1,83 @@
+{
+  "id": "visual-table",
+  "version": "1.0.0",
+  "type": "visual",
+  "name": "Tables and pivots",
+  "description": "Sortable, searchable data tables with formats, data bars, heat colouring, totals and grouping; pivot tables.",
+  "author": "ai-bi core",
+  "license": "MIT",
+  "defaultEnabled": true,
+  "client": "client/index.tsx",
+  "capabilities": {
+    "widgets": [
+      {
+        "type": "table",
+        "title": "Data table",
+        "description": "Rows and columns with formatting, sorting, search, totals, data bars, heat colours and conditional styles.",
+        "needsDataset": true,
+        "columnProps": ["groupBy"],
+        "aiHints": "Use for detail and exact numbers. Keep ≤ 8 columns. Add `bar: true` on the main measure, `heat: true` on variance, totals for sums.",
+        "handleMethods": ["scrollToRow", "highlightRows", "getRows"],
+        "defaultSize": { "w": 12, "h": 10 },
+        "propsSchema": {
+          "type": "object",
+          "properties": {
+            "columns": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["key"],
+                "properties": {
+                  "key": { "type": "string" },
+                  "label": { "type": "string" },
+                  "format": { "type": "string" },
+                  "align": { "type": "string", "enum": ["left", "right", "center"] },
+                  "width": { "type": "number" },
+                  "bar": { "type": "boolean", "description": "inline data bar" },
+                  "heat": { "type": "boolean", "description": "colour scale red → green" },
+                  "heatInvert": { "type": "boolean" },
+                  "delta": { "type": "boolean", "description": "colour positive green / negative red with arrow" },
+                  "total": { "type": "string", "enum": ["sum", "avg", "min", "max", "count", "none"] }
+                }
+              }
+            },
+            "pageSize": { "type": "integer" },
+            "sortable": { "type": "boolean" },
+            "defaultSort": { "type": "object", "properties": { "column": { "type": "string" }, "desc": { "type": "boolean" } } },
+            "search": { "type": "boolean" },
+            "totals": { "type": "boolean" },
+            "groupBy": { "type": "string", "description": "group rows with subtotals" },
+            "density": { "type": "string", "enum": ["compact", "normal"] },
+            "stickyHeader": { "type": "boolean" },
+            "rowNumbers": { "type": "boolean" }
+          }
+        },
+        "example": { "columns": [{ "key": "region" }, { "key": "revenue", "format": "currency", "bar": true, "total": "sum" }, { "key": "attainment", "format": "percent", "heat": true }], "totals": true, "defaultSort": { "column": "revenue", "desc": true } }
+      },
+      {
+        "type": "pivot",
+        "title": "Pivot table",
+        "description": "Cross-tab: row dimensions × column dimension with an aggregated measure, totals and heat colouring.",
+        "needsDataset": true,
+        "columnProps": ["rows", "columns", "value"],
+        "handleMethods": ["getRows"],
+        "defaultSize": { "w": 12, "h": 10 },
+        "propsSchema": {
+          "type": "object",
+          "required": ["rows", "columns", "value"],
+          "properties": {
+            "rows": { "type": "array", "items": { "type": "string" } },
+            "columns": { "type": "array", "items": { "type": "string" } },
+            "value": { "type": "string" },
+            "agg": { "type": "string", "enum": ["sum", "avg", "min", "max", "count", "countDistinct"] },
+            "format": { "type": "string" },
+            "totals": { "type": "boolean" },
+            "heat": { "type": "boolean" },
+            "columnOrder": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "example": { "rows": ["region"], "columns": ["quarter"], "value": "revenue", "agg": "sum", "format": "compactCurrency", "totals": true, "heat": true }
+      }
+    ]
+  }
+}

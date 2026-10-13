@@ -1,0 +1,281 @@
+{
+  "id": "visual-echarts",
+  "version": "1.0.0",
+  "type": "visual",
+  "name": "Charts (Apache ECharts)",
+  "description": "Bar, line, area, combo, pie, scatter, heatmap, treemap, sunburst, sankey, funnel, gauge, radar, waterfall, boxplot, candlestick, map, and raw ECharts options.",
+  "author": "ai-bi core",
+  "license": "MIT",
+  "defaultEnabled": true,
+  "client": "client/index.tsx",
+  "capabilities": {
+    "widgets": [
+      {
+        "type": "echarts.bar",
+        "title": "Bar / column chart",
+        "description": "Compare a measure across categories. One bar series per column in `series`, or long data split by `groupBy`.",
+        "needsDataset": true,
+        "columnProps": ["x", "series", "groupBy", "secondary"],
+        "aiHints": "Categories on x (regions, products). Use horizontal: true for long labels or rankings. stack: true for composition. For time on x prefer echarts.line unless few periods.",
+        "handleMethods": ["setOption", "highlight", "downplay", "showTip", "getInstance"],
+        "defaultSize": { "w": 6, "h": 8 },
+        "propsSchema": {
+          "type": "object",
+          "required": ["x"],
+          "properties": {
+            "x": { "type": "string", "description": "category column" },
+            "series": { "type": "array", "items": { "type": "string" }, "description": "measure columns (wide data)" },
+            "groupBy": { "type": "string", "description": "split one measure into series by this column (long data); use with exactly one series column" },
+            "seriesNames": { "type": "object", "additionalProperties": { "type": "string" } },
+            "horizontal": { "type": "boolean" },
+            "stack": { "type": "boolean" },
+            "percentStack": { "type": "boolean", "description": "100% stacked" },
+            "labels": { "type": "boolean" },
+            "format": { "anyOf": [{ "type": "string" }, { "type": "object" }], "description": "value format spec or { column: spec }" },
+            "secondary": { "type": "array", "items": { "type": "string" }, "description": "series plotted on a right-hand axis" },
+            "sort": { "type": "string", "enum": ["none", "asc", "desc"] },
+            "colors": { "type": "array", "items": { "type": "string" } },
+            "colorBy": { "type": "string", "enum": ["series", "data"] },
+            "legend": { "anyOf": [{ "type": "boolean" }, { "type": "string", "enum": ["top", "bottom", "right"] }] },
+            "referenceLines": { "type": "array", "items": { "type": "object", "properties": { "value": {}, "label": { "type": "string" }, "color": { "type": "string" }, "type": { "type": "string", "enum": ["value", "average", "min", "max"] } } } },
+            "dataZoom": { "type": "boolean" },
+            "option": { "type": "object", "description": "ECharts option deep-merged over the generated one" }
+          }
+        },
+        "example": { "x": "region", "series": ["revenue", "target"], "format": "compactCurrency", "horizontal": true }
+      },
+      {
+        "type": "echarts.line",
+        "title": "Line chart",
+        "description": "Trends over time. One line per column in `series`, or long data split by `groupBy`.",
+        "needsDataset": true,
+        "columnProps": ["x", "series", "groupBy", "secondary"],
+        "aiHints": "Time on x (dates, months). Use area: true for volume, smooth: true for soft curves, referenceLines for targets.",
+        "handleMethods": ["setOption", "highlight", "downplay", "showTip", "getInstance"],
+        "defaultSize": { "w": 8, "h": 8 },
+        "propsSchema": {
+          "type": "object",
+          "required": ["x"],
+          "properties": {
+            "x": { "type": "string" },
+            "series": { "type": "array", "items": { "type": "string" } },
+            "groupBy": { "type": "string" },
+            "seriesNames": { "type": "object" },
+            "smooth": { "type": "boolean" },
+            "area": { "type": "boolean" },
+            "stack": { "type": "boolean" },
+            "labels": { "type": "boolean" },
+            "symbols": { "type": "boolean" },
+            "format": { "anyOf": [{ "type": "string" }, { "type": "object" }] },
+            "xFormat": { "type": "string", "description": "format for x labels: date | month | quarter | year" },
+            "secondary": { "type": "array", "items": { "type": "string" } },
+            "colors": { "type": "array", "items": { "type": "string" } },
+            "legend": { "anyOf": [{ "type": "boolean" }, { "type": "string" }] },
+            "referenceLines": { "type": "array", "items": { "type": "object" } },
+            "dataZoom": { "type": "boolean" },
+            "dashed": { "type": "array", "items": { "type": "string" }, "description": "series drawn dashed (e.g. forecast, last year)" },
+            "option": { "type": "object" }
+          }
+        },
+        "example": { "x": "month", "series": ["revenue", "ly_revenue"], "dashed": ["ly_revenue"], "seriesNames": { "ly_revenue": "Last year" }, "format": "compactCurrency" }
+      },
+      {
+        "type": "echarts.area",
+        "title": "Area chart",
+        "description": "Line chart with filled areas; stacked by default when several series.",
+        "needsDataset": true,
+        "columnProps": ["x", "series", "groupBy"],
+        "defaultSize": { "w": 8, "h": 8 },
+        "handleMethods": ["setOption", "highlight", "downplay", "showTip", "getInstance"],
+        "propsSchema": { "type": "object", "required": ["x"], "properties": { "x": { "type": "string" }, "series": { "type": "array", "items": { "type": "string" } }, "groupBy": { "type": "string" }, "stack": { "type": "boolean" }, "smooth": { "type": "boolean" }, "format": {}, "xFormat": { "type": "string" }, "seriesNames": { "type": "object" }, "colors": { "type": "array" }, "legend": {}, "option": { "type": "object" } } },
+        "example": { "x": "month", "series": ["online", "retail"], "stack": true }
+      },
+      {
+        "type": "echarts.combo",
+        "title": "Combo bar + line (dual axis)",
+        "description": "Bars for volumes and lines for rates or targets, optionally on a secondary axis.",
+        "needsDataset": true,
+        "columnProps": ["x", "bars", "lines", "secondary"],
+        "aiHints": "Revenue (bars) vs margin % (line on secondary axis); actual (bars) vs target (line).",
+        "defaultSize": { "w": 8, "h": 8 },
+        "handleMethods": ["setOption", "highlight", "downplay", "showTip", "getInstance"],
+        "propsSchema": {
+          "type": "object",
+          "required": ["x"],
+          "properties": {
+            "x": { "type": "string" },
+            "bars": { "type": "array", "items": { "type": "string" } },
+            "lines": { "type": "array", "items": { "type": "string" } },
+            "secondary": { "type": "array", "items": { "type": "string" } },
+            "stack": { "type": "boolean" },
+            "format": {},
+            "secondaryFormat": { "type": "string" },
+            "xFormat": { "type": "string" },
+            "seriesNames": { "type": "object" },
+            "colors": { "type": "array" },
+            "labels": { "type": "boolean" },
+            "legend": {},
+            "option": { "type": "object" }
+          }
+        },
+        "example": { "x": "month", "bars": ["revenue"], "lines": ["margin_pct"], "secondary": ["margin_pct"], "format": { "revenue": "compactCurrency", "margin_pct": "percent" } }
+      },
+      {
+        "type": "echarts.pie",
+        "title": "Pie / donut",
+        "description": "Share of a total across a few categories (≤ 7 slices; use topN with otherLabel).",
+        "needsDataset": true,
+        "columnProps": ["name", "value"],
+        "defaultSize": { "w": 4, "h": 8 },
+        "handleMethods": ["setOption", "highlight", "downplay", "showTip", "getInstance"],
+        "propsSchema": { "type": "object", "required": ["name", "value"], "properties": { "name": { "type": "string" }, "value": { "type": "string" }, "donut": { "type": "boolean" }, "rose": { "type": "boolean" }, "labels": { "anyOf": [{ "type": "boolean" }, { "type": "string", "enum": ["percent", "value", "name"] }] }, "format": { "type": "string" }, "centerLabel": { "type": "string", "description": "text in the donut hole; supports {{ }} bindings" }, "colors": { "type": "array" }, "legend": {}, "option": { "type": "object" } } },
+        "example": { "name": "channel", "value": "revenue", "donut": true, "labels": "percent" }
+      },
+      {
+        "type": "echarts.scatter",
+        "title": "Scatter / bubble",
+        "description": "Relationship between two measures; optional bubble size and group colours.",
+        "needsDataset": true,
+        "columnProps": ["x", "y", "size", "groupBy", "label"],
+        "defaultSize": { "w": 6, "h": 8 },
+        "handleMethods": ["setOption", "highlight", "downplay", "showTip", "getInstance"],
+        "propsSchema": { "type": "object", "required": ["x", "y"], "properties": { "x": { "type": "string" }, "y": { "type": "string" }, "size": { "type": "string" }, "groupBy": { "type": "string" }, "label": { "type": "string" }, "xFormat": { "type": "string" }, "yFormat": { "type": "string" }, "quadrants": { "type": "boolean", "description": "draw average lines splitting the chart into quadrants" }, "colors": { "type": "array" }, "legend": {}, "option": { "type": "object" } } },
+        "example": { "x": "discount_pct", "y": "margin_pct", "size": "revenue", "label": "product", "quadrants": true }
+      },
+      {
+        "type": "echarts.heatmap",
+        "title": "Heatmap",
+        "description": "A measure across two categorical dimensions (e.g. weekday × hour, region × month).",
+        "needsDataset": true,
+        "columnProps": ["x", "y", "value"],
+        "defaultSize": { "w": 8, "h": 8 },
+        "handleMethods": ["setOption", "getInstance"],
+        "propsSchema": { "type": "object", "required": ["x", "y", "value"], "properties": { "x": { "type": "string" }, "y": { "type": "string" }, "value": { "type": "string" }, "format": { "type": "string" }, "labels": { "type": "boolean" }, "colors": { "type": "array", "items": { "type": "string" }, "description": "low → high colour ramp" }, "option": { "type": "object" } } },
+        "example": { "x": "month", "y": "region", "value": "revenue", "format": "compactCurrency" }
+      },
+      {
+        "type": "echarts.treemap",
+        "title": "Treemap",
+        "description": "Hierarchical composition by area. `path` lists hierarchy columns from top to leaf.",
+        "needsDataset": true,
+        "columnProps": ["path", "value"],
+        "defaultSize": { "w": 6, "h": 9 },
+        "handleMethods": ["setOption", "getInstance"],
+        "propsSchema": { "type": "object", "required": ["path", "value"], "properties": { "path": { "type": "array", "items": { "type": "string" } }, "value": { "type": "string" }, "format": { "type": "string" }, "colors": { "type": "array" }, "option": { "type": "object" } } },
+        "example": { "path": ["category", "product"], "value": "revenue" }
+      },
+      {
+        "type": "echarts.sunburst",
+        "title": "Sunburst",
+        "description": "Hierarchical composition as rings. `path` lists hierarchy columns.",
+        "needsDataset": true,
+        "columnProps": ["path", "value"],
+        "defaultSize": { "w": 5, "h": 9 },
+        "handleMethods": ["setOption", "getInstance"],
+        "propsSchema": { "type": "object", "required": ["path", "value"], "properties": { "path": { "type": "array", "items": { "type": "string" } }, "value": { "type": "string" }, "format": { "type": "string" }, "colors": { "type": "array" }, "option": { "type": "object" } } },
+        "example": { "path": ["region", "country"], "value": "revenue" }
+      },
+      {
+        "type": "echarts.sankey",
+        "title": "Sankey flow",
+        "description": "Flows between stages (source → target with value), e.g. budget → department → cost type.",
+        "needsDataset": true,
+        "columnProps": ["source", "target", "value"],
+        "defaultSize": { "w": 8, "h": 10 },
+        "handleMethods": ["setOption", "getInstance"],
+        "propsSchema": { "type": "object", "required": ["source", "target", "value"], "properties": { "source": { "type": "string" }, "target": { "type": "string" }, "value": { "type": "string" }, "format": { "type": "string" }, "orient": { "type": "string", "enum": ["horizontal", "vertical"] }, "option": { "type": "object" } } },
+        "example": { "source": "from", "target": "to", "value": "amount" }
+      },
+      {
+        "type": "echarts.funnel",
+        "title": "Funnel",
+        "description": "Stage conversion (leads → opportunities → won).",
+        "needsDataset": true,
+        "columnProps": ["name", "value"],
+        "defaultSize": { "w": 5, "h": 8 },
+        "handleMethods": ["setOption", "getInstance"],
+        "propsSchema": { "type": "object", "required": ["name", "value"], "properties": { "name": { "type": "string" }, "value": { "type": "string" }, "format": { "type": "string" }, "sort": { "type": "string", "enum": ["descending", "ascending", "none"] }, "showConversion": { "type": "boolean" }, "option": { "type": "object" } } },
+        "example": { "name": "stage", "value": "count", "showConversion": true }
+      },
+      {
+        "type": "echarts.gauge",
+        "title": "Gauge",
+        "description": "One value against a range or target (attainment %, utilisation).",
+        "needsDataset": true,
+        "columnProps": ["value", "target"],
+        "defaultSize": { "w": 3, "h": 6 },
+        "handleMethods": ["setOption", "getInstance"],
+        "propsSchema": { "type": "object", "required": ["value"], "properties": { "value": { "type": "string" }, "min": { "type": "number" }, "max": { "type": "number" }, "target": { "anyOf": [{ "type": "string" }, { "type": "number" }] }, "format": { "type": "string" }, "bands": { "type": "array", "items": { "type": "object", "properties": { "to": { "type": "number" }, "color": { "type": "string" } } }, "description": "colour bands as fractions of the range, e.g. [{to:0.6,color:'#e5484d'},{to:0.9,color:'#f5a623'},{to:1,color:'#30a46c'}]" }, "aggregate": { "type": "string", "enum": ["first", "sum", "avg", "last"] }, "option": { "type": "object" } } },
+        "example": { "value": "attainment", "min": 0, "max": 1.2, "format": "percent" }
+      },
+      {
+        "type": "echarts.radar",
+        "title": "Radar",
+        "description": "Compare a few entities across several measures. Each row is one entity (name column); measures are the axes.",
+        "needsDataset": true,
+        "columnProps": ["name", "measures"],
+        "defaultSize": { "w": 5, "h": 8 },
+        "handleMethods": ["setOption", "getInstance"],
+        "propsSchema": { "type": "object", "required": ["name", "measures"], "properties": { "name": { "type": "string" }, "measures": { "type": "array", "items": { "type": "string" } }, "max": { "anyOf": [{ "type": "number" }, { "type": "object" }] }, "area": { "type": "boolean" }, "option": { "type": "object" } } },
+        "example": { "name": "region", "measures": ["growth", "margin", "retention", "nps"] }
+      },
+      {
+        "type": "echarts.waterfall",
+        "title": "Waterfall / bridge",
+        "description": "How a start value moves to an end value through positive and negative contributions (variance bridge, P&L walk).",
+        "needsDataset": true,
+        "columnProps": ["x", "value"],
+        "aiHints": "Rows in order: start (isTotal), contributions, end (isTotal). Use `totalColumn` (boolean column) or `totals` (list of x values) to mark totals.",
+        "defaultSize": { "w": 8, "h": 8 },
+        "handleMethods": ["setOption", "getInstance"],
+        "propsSchema": { "type": "object", "required": ["x", "value"], "properties": { "x": { "type": "string" }, "value": { "type": "string" }, "totals": { "type": "array", "items": { "type": "string" } }, "totalColumn": { "type": "string" }, "format": { "type": "string" }, "colors": { "type": "object", "properties": { "up": { "type": "string" }, "down": { "type": "string" }, "total": { "type": "string" } } }, "labels": { "type": "boolean" }, "option": { "type": "object" } } },
+        "example": { "x": "item", "value": "amount", "totals": ["Budget", "Actual"], "format": "compactCurrency" }
+      },
+      {
+        "type": "echarts.boxplot",
+        "title": "Box plot",
+        "description": "Distribution summaries per category from precomputed min, q1, median, q3, max columns.",
+        "needsDataset": true,
+        "columnProps": ["x", "min", "q1", "median", "q3", "max"],
+        "defaultSize": { "w": 6, "h": 8 },
+        "handleMethods": ["setOption", "getInstance"],
+        "propsSchema": { "type": "object", "required": ["x", "min", "q1", "median", "q3", "max"], "properties": { "x": { "type": "string" }, "min": { "type": "string" }, "q1": { "type": "string" }, "median": { "type": "string" }, "q3": { "type": "string" }, "max": { "type": "string" }, "format": { "type": "string" }, "option": { "type": "object" } } },
+        "example": { "x": "region", "min": "p0", "q1": "p25", "median": "p50", "q3": "p75", "max": "p100" }
+      },
+      {
+        "type": "echarts.candlestick",
+        "title": "Candlestick",
+        "description": "Open/close/low/high per period (prices, daily ranges).",
+        "needsDataset": true,
+        "columnProps": ["x", "open", "close", "low", "high"],
+        "defaultSize": { "w": 8, "h": 8 },
+        "handleMethods": ["setOption", "getInstance"],
+        "propsSchema": { "type": "object", "required": ["x", "open", "close", "low", "high"], "properties": { "x": { "type": "string" }, "open": { "type": "string" }, "close": { "type": "string" }, "low": { "type": "string" }, "high": { "type": "string" }, "dataZoom": { "type": "boolean" }, "option": { "type": "object" } } },
+        "example": { "x": "day", "open": "open", "close": "close", "low": "low", "high": "high" }
+      },
+      {
+        "type": "echarts.map",
+        "title": "Choropleth map",
+        "description": "Values by geographic region. `geo` is a GeoJSON asset name in the page bundle assets or a built-in map ('world').",
+        "needsDataset": true,
+        "columnProps": ["name", "value"],
+        "defaultSize": { "w": 8, "h": 10 },
+        "handleMethods": ["setOption", "getInstance"],
+        "propsSchema": { "type": "object", "required": ["geo", "name", "value"], "properties": { "geo": { "type": "string" }, "name": { "type": "string" }, "value": { "type": "string" }, "nameProperty": { "type": "string", "description": "GeoJSON feature property matching `name` (default 'name')" }, "format": { "type": "string" }, "colors": { "type": "array" }, "roam": { "type": "boolean" }, "option": { "type": "object" } } },
+        "example": { "geo": "regions.geojson", "name": "region", "value": "revenue" }
+      },
+      {
+        "type": "echarts.raw",
+        "title": "Any ECharts chart (raw option)",
+        "description": "Full ECharts option for anything the other types cannot express. Bindings: {{col.<name>}} is the column as an array, {{rows}} the row objects, {{source}} a dataset source array with header row, plus {{filters...}}.",
+        "needsDataset": false,
+        "columnProps": [],
+        "aiHints": "Use dataset: { source: '{{source}}' } with encode for most charts. Functions are not allowed in options (JSON only); use formatter template strings like '{b}: {c}'.",
+        "defaultSize": { "w": 6, "h": 8 },
+        "handleMethods": ["setOption", "getInstance"],
+        "propsSchema": { "type": "object", "required": ["option"], "properties": { "option": { "type": "object" }, "valueFormat": { "type": "string", "description": "format spec applied to tooltip/axis values when the option does not set formatters" } } },
+        "example": { "option": { "dataset": { "source": "{{source}}" }, "xAxis": { "type": "category" }, "yAxis": {}, "series": [{ "type": "bar", "encode": { "x": "region", "y": "revenue" } }] } }
+      }
+    ]
+  }
+}

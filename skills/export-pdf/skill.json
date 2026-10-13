@@ -1,0 +1,12 @@
+{
+  "id": "export-pdf",
+  "version": "1.0.0",
+  "type": "export",
+  "name": "PDF export",
+  "description": "Render the page with live data in a headless browser (Edge or Chrome installed on the server) and print it to PDF.",
+  "author": "ai-bi core",
+  "license": "MIT",
+  "defaultEnabled": true,
+  "server": "server/index.ts",
+  "permissions": ["process:browser"]
+}

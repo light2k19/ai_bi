@@ -1,0 +1,43 @@
+# AI BI in Docker. Everything the app stores is in the `aibi-data` volume (or the host folder you map
+# instead): projects, pages and versions, the encryption key, skills, modules, packages, backups.
+# Updating: `docker compose build && docker compose up -d` — the data volume is kept, pending schema
+# changes are applied on start after an automatic backup.
+#
+# Two origins are required: the platform (web app + API) and the page runtime must be reachable on
+# different hostnames or ports, never as a path under the same hostname, or the page sandbox is lost.
+# Set the three AIBI_* origins below to what users type in their browser (behind a reverse proxy: the
+# public https URLs). Put secrets (AI_API_KEY, AIBI_SECRET) in a `.env` file next to this one.
+
+services:
+  aibi:
+    build: .
+    image: aibi:latest
+    restart: unless-stopped
+    ports:
+      - "8787:8787"   # platform: web app and API
+      - "8788:8788"   # page runtime (separate origin)
+    environment:
+      AIBI_WEB_ORIGIN: ${AIBI_WEB_ORIGIN:-http://localhost:8787}
+      AIBI_PUBLIC_API_URL: ${AIBI_PUBLIC_API_URL:-http://localhost:8787}
+      AIBI_RUNTIME_ORIGIN: ${AIBI_RUNTIME_ORIGIN:-http://localhost:8788}
+      # AIBI_SECURE_COOKIES: "1"                 # when served over https
+      # AIBI_INTERNAL_RUNTIME_URL / AIBI_INTERNAL_API_URL: only when the runtime or API run in another
+      # container; by default the server reaches its own listeners for PDF export
+      # AIBI_SECRET: ${AIBI_SECRET}              # optional: otherwise the key is created in /data/.secret
+      AI_BASE_URL: ${AI_BASE_URL:-https://openrouter.ai/api}
+      AI_API_KEY: ${AI_API_KEY:-}
+      AI_MODEL: ${AI_MODEL:-google/gemini-2.5-flash}
+      AI_MODEL_FAST: ${AI_MODEL_FAST:-google/gemini-2.5-flash}
+      AI_TOOL_MODE: ${AI_TOOL_MODE:-native}
+    volumes:
+      - aibi-data:/data
+      # or a host folder you can back up directly:
+      # - /srv/aibi/data:/data
+    # Databases that run in containers on this host: join their network and use the service name as host.
+    # networks: [db]
+
+volumes:
+  aibi-data:
+
+# Backup while running:  docker compose exec aibi node tools/backup.mjs /data/backups/manual
+# Restore:               stop, copy a backup folder's contents into the volume (keep .secret), start.

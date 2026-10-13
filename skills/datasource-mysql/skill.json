@@ -1,0 +1,33 @@
+{
+  "id": "datasource-mysql",
+  "version": "1.0.0",
+  "type": "datasource",
+  "name": "MySQL / MariaDB (read-only)",
+  "description": "Query MySQL 5.7+/8 and MariaDB with SELECT-only access: read-only query guard, read-only transactions, row and time limits.",
+  "author": "ai-bi core",
+  "license": "MIT",
+  "multiInstance": true,
+  "defaultEnabled": true,
+  "configSchema": {
+    "type": "object",
+    "required": ["host", "user", "database"],
+    "properties": {
+      "host": { "type": "string", "title": "Host" },
+      "port": { "type": "integer", "title": "Port", "default": 3306 },
+      "database": { "type": "string", "title": "Default database" },
+      "user": { "type": "string", "title": "User (SELECT-only account)" },
+      "password": { "type": "string", "title": "Password", "format": "password" },
+      "ssl": { "type": "boolean", "title": "Use TLS", "default": false },
+      "sslRejectUnauthorized": { "type": "boolean", "title": "Verify TLS certificate", "default": true },
+      "allowedSchemas": { "type": "array", "items": { "type": "string" }, "title": "Allowed schemas (empty = default database only for introspection)" },
+      "deniedTables": { "type": "array", "items": { "type": "string" }, "title": "Denied tables" },
+      "timeoutMs": { "type": "integer", "title": "Statement timeout (ms)", "default": 30000 },
+      "maxRows": { "type": "integer", "title": "Max rows", "default": 10000 }
+    }
+  },
+  "secrets": ["password"],
+  "userCredentials": ["user", "password"],
+  "capabilities": { "dialect": "mysql", "kind": "sql", "introspection": true, "readOnly": true },
+  "server": "server/index.ts",
+  "permissions": ["network:db"]
+}

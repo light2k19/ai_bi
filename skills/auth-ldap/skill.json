@@ -1,0 +1,65 @@
+{
+  "id": "auth-ldap",
+  "version": "1.0.0",
+  "type": "auth",
+  "name": "Active Directory (LDAP)",
+  "description": "Sign in with a Windows / Active Directory user id and password. Passwords are checked by the directory and never stored.",
+  "author": "ai-bi core",
+  "license": "MIT",
+  "scope": "system",
+  "defaultEnabled": false,
+  "configSchema": {
+    "type": "object",
+    "required": [
+      "url",
+      "baseDn"
+    ],
+    "properties": {
+      "url": {
+        "type": "string",
+        "title": "Server URL",
+        "description": "ldap://dc1.corp.example.com:389 or ldaps://dc1.corp.example.com:636"
+      },
+      "baseDn": {
+        "type": "string",
+        "title": "Base DN",
+        "description": "Where users are searched, e.g. DC=corp,DC=example,DC=com"
+      },
+      "bindDn": {
+        "type": "string",
+        "title": "Service account",
+        "description": "Account used to look users up, as DN or UPN (svc-aibi@corp.example.com). Leave empty to bind directly as the signing-in user."
+      },
+      "bindPassword": {
+        "type": "string",
+        "title": "Service account password",
+        "format": "password"
+      },
+      "upnSuffix": {
+        "type": "string",
+        "title": "UPN suffix",
+        "description": "Appended to the user id when binding directly, e.g. corp.example.com"
+      },
+      "userFilter": {
+        "type": "string",
+        "title": "Extra filter",
+        "description": "Optional LDAP filter every user must match, e.g. (memberOf=CN=BI Users,OU=Groups,DC=corp,DC=example,DC=com)"
+      },
+      "tlsRejectUnauthorized": {
+        "type": "boolean",
+        "title": "Verify the server certificate (ldaps)",
+        "default": true
+      },
+      "autoCreateUsers": {
+        "type": "boolean",
+        "title": "Create an account on first sign-in",
+        "description": "Off: only user ids an admin added as project members can sign in",
+        "default": false
+      }
+    }
+  },
+  "secrets": [
+    "bindPassword"
+  ],
+  "server": "server/index.ts"
+}

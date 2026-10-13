@@ -1,0 +1,11 @@
+{
+  "id": "auth-local",
+  "version": "1.0.0",
+  "type": "auth",
+  "name": "Email and password",
+  "description": "Local accounts created by administrators, passwords hashed with scrypt.",
+  "author": "ai-bi core",
+  "license": "MIT",
+  "scope": "system",
+  "defaultEnabled": true
+}

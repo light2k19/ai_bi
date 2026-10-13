@@ -1,0 +1,474 @@
+:root {
+  --bg: #f6f7f9;
+  --surface: #ffffff;
+  --surface2: #f1f3f6;
+  --border: #e3e6ec;
+  --text: #151a23;
+  --muted: #5f6b7a;
+  --accent: #2f6fed;
+  --success: #1f9d61;
+  --warning: #d98b0b;
+  --danger: #d64545;
+  --font: Inter, "Segoe UI", system-ui, -apple-system, sans-serif;
+  --radius: 12px;
+  --shadow: 0 1px 2px rgba(16, 24, 40, 0.04), 0 1px 3px rgba(16, 24, 40, 0.06);
+}
+:root[data-theme="dark"] {
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.25);
+}
+
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+}
+body {
+  padding: 16px;
+  overflow-x: hidden;
+}
+@media (max-width: 640px) {
+  body {
+    padding: 10px;
+  }
+}
+
+.rt-boot {
+  display: grid;
+  place-items: center;
+  height: 60vh;
+}
+.rt-spinner {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2.5px solid color-mix(in srgb, var(--accent) 25%, transparent);
+  border-top-color: var(--accent);
+  display: inline-block;
+  animation: rt-spin 0.8s linear infinite;
+}
+.rt-spin {
+  display: inline-block;
+  animation: rt-spin 0.8s linear infinite;
+}
+@keyframes rt-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* filter bar */
+.rt-filterbar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+.rt-filters {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
+.rt-filter {
+  min-width: 140px;
+}
+.rt-filter-actions {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.rt-filter-fallback {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.rt-input {
+  height: 34px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text);
+  padding: 0 10px;
+  font: inherit;
+}
+
+/* grid & cards */
+.rt-grid {
+  position: relative;
+}
+.rt-cell {
+  min-width: 0;
+}
+.rt-card {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: box-shadow 0.15s, outline-color 0.15s;
+}
+.rt-card.rt-bare {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+.rt-card.rt-nested {
+  box-shadow: none;
+}
+.rt-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 12px 40px 0 16px;
+  gap: 8px;
+}
+.rt-titles {
+  min-width: 0;
+}
+.rt-title {
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.rt-subtitle {
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.rt-card-body {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  padding: 10px 14px 12px;
+}
+.rt-bare .rt-card-body {
+  padding: 0;
+}
+.rt-loading {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: color-mix(in srgb, var(--surface) 55%, transparent);
+  backdrop-filter: blur(1px);
+  pointer-events: none;
+}
+.rt-error {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12.5px;
+  color: var(--danger);
+  background: color-mix(in srgb, var(--danger) 8%, transparent);
+  border: 1px solid color-mix(in srgb, var(--danger) 25%, transparent);
+  border-radius: 8px;
+  padding: 10px 12px;
+  max-height: 100%;
+  overflow: auto;
+  word-break: break-word;
+}
+.rt-missing {
+  height: 100%;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  color: var(--muted);
+  font-size: 12.5px;
+  padding: 8px;
+}
+.rt-missing code {
+  background: var(--surface2);
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+
+/* widget menu */
+.rt-menu-wrap {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 5;
+  opacity: 0;
+  transition: opacity 0.12s;
+}
+.rt-card:hover .rt-menu-wrap,
+.rt-menu-wrap:focus-within {
+  opacity: 1;
+}
+.rt-icon-btn {
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--muted);
+  border-radius: 7px;
+  width: 28px;
+  height: 28px;
+  display: inline-grid;
+  place-items: center;
+  cursor: pointer;
+  font-size: 15px;
+  line-height: 1;
+}
+.rt-icon-btn:hover {
+  background: var(--surface2);
+  color: var(--text);
+  border-color: var(--border);
+}
+.rt-link-btn {
+  border: none;
+  background: none;
+  color: var(--accent);
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+}
+.rt-menu {
+  position: absolute;
+  right: 0;
+  top: 32px;
+  min-width: 200px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(16, 24, 40, 0.16);
+  padding: 4px;
+  display: flex;
+  flex-direction: column;
+}
+.rt-menu button {
+  text-align: left;
+  border: none;
+  background: none;
+  color: var(--text);
+  padding: 8px 10px;
+  border-radius: 7px;
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+}
+.rt-menu button:hover {
+  background: var(--surface2);
+}
+
+/* full screen: the browser's Fullscreen API on the card (fallback: fixed overlay without transforms) */
+.rt-card.rt-full {
+  position: fixed;
+  inset: 12px;
+  z-index: 1000;
+  height: auto;
+  width: auto;
+  transform: none !important;
+}
+.rt-card:fullscreen {
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  border-radius: 0;
+  border: 0;
+  box-shadow: none;
+  padding: 8px 8px 12px;
+  transform: none;
+  background: var(--surface);
+}
+.rt-card:fullscreen .rt-card-head {
+  padding-right: 64px;
+}
+.rt-card:fullscreen::backdrop {
+  background: var(--bg, #0b0d12);
+}
+.rt-full-close {
+  position: fixed;
+  top: 18px;
+  right: 18px;
+  z-index: 1001;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+}
+
+/* edit mode */
+.rt-mode-edit .rt-card {
+  cursor: grab;
+}
+.rt-mode-edit .rt-card:hover {
+  outline: 1px dashed color-mix(in srgb, var(--accent) 60%, transparent);
+  outline-offset: 2px;
+}
+.rt-card.rt-selected,
+.rt-mode-edit .rt-card.rt-selected:hover {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.rt-card.rt-hidden-edit {
+  opacity: 0.45;
+}
+.react-grid-item.react-grid-placeholder {
+  background: var(--accent) !important;
+  opacity: 0.12 !important;
+  border-radius: var(--radius);
+}
+.react-grid-item > .react-resizable-handle {
+  z-index: 6;
+}
+.react-grid-item > .react-resizable-handle::after {
+  border-color: var(--muted) !important;
+}
+.rt-deselect {
+  height: 40px;
+}
+
+/* tabs */
+.rt-tabs {
+  padding-bottom: 12px;
+}
+.rt-tabstrip {
+  display: flex;
+  gap: 4px;
+  padding: 10px 14px 0;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 12px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+}
+.rt-tabstrip::-webkit-scrollbar {
+  display: none;
+}
+.rt-tab {
+  border: none;
+  background: none;
+  color: var(--muted);
+  padding: 8px 12px;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 500;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  white-space: nowrap;
+}
+.rt-tab-active {
+  color: var(--text);
+  border-bottom-color: var(--accent);
+}
+.rt-tab-body {
+  padding: 0 14px;
+}
+
+/* empty page */
+.rt-empty {
+  border: 1.5px dashed var(--border);
+  border-radius: var(--radius);
+  padding: 64px 24px;
+  text-align: center;
+  color: var(--muted);
+}
+.rt-empty-icon {
+  font-size: 28px;
+  color: var(--accent);
+}
+.rt-empty-title {
+  font-weight: 600;
+  color: var(--text);
+  font-size: 16px;
+  margin-top: 8px;
+}
+.rt-empty-text {
+  margin-top: 6px;
+}
+
+/* render / print */
+.rt-mode-render .rt-card {
+  box-shadow: none;
+}
+@media print {
+  body {
+    padding: 0;
+    background: #fff;
+  }
+  .rt-menu-wrap,
+  .rt-filter-actions,
+  .rt-deselect {
+    display: none !important;
+  }
+  .rt-card {
+    break-inside: avoid;
+    box-shadow: none;
+  }
+}
+
+/* standalone print rendering */
+.rt-print-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+.rt-print-head h1 {
+  font-size: 20px;
+  margin: 0;
+}
+.rt-print-head p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+.rt-print-head span {
+  color: var(--muted);
+  font-size: 12px;
+  white-space: nowrap;
+}
+.rt-print-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+}
+.rt-print-cell {
+  min-width: 0;
+  break-inside: avoid;
+}
+body.rt-standalone {
+  background: #fff;
+}
+@page {
+  margin: 8mm;
+}
+html:has(body.rt-standalone) {
+  background: #fff;
+}
+.rt-card.rt-full .rt-menu-wrap,
+.rt-card:fullscreen .rt-menu-wrap {
+  right: 56px;
+}
+
+/* widget menu rendered on the body, next to its button */
+.rt-menu.rt-menu-floating {
+  position: fixed;
+  right: auto;
+  width: 208px;
+  z-index: 1200;
+}

@@ -1,0 +1,34 @@
+{
+  "id": "datasource-mssql",
+  "version": "1.0.0",
+  "type": "datasource",
+  "name": "Microsoft SQL Server (read-only)",
+  "description": "Query SQL Server 2016+ / Azure SQL with SELECT-only access. Every query runs inside a transaction that is always rolled back, with ApplicationIntent=ReadOnly, row and time limits.",
+  "author": "ai-bi core",
+  "license": "MIT",
+  "multiInstance": true,
+  "defaultEnabled": true,
+  "configSchema": {
+    "type": "object",
+    "required": ["server", "user", "database"],
+    "properties": {
+      "server": { "type": "string", "title": "Server host" },
+      "port": { "type": "integer", "title": "Port", "default": 1433 },
+      "instanceName": { "type": "string", "title": "Named instance (optional)" },
+      "database": { "type": "string", "title": "Database" },
+      "user": { "type": "string", "title": "User (db_datareader only)" },
+      "password": { "type": "string", "title": "Password", "format": "password" },
+      "encrypt": { "type": "boolean", "title": "Encrypt", "default": true },
+      "trustServerCertificate": { "type": "boolean", "title": "Trust server certificate", "default": false },
+      "allowedSchemas": { "type": "array", "items": { "type": "string" }, "title": "Allowed schemas (empty = all user schemas)" },
+      "deniedTables": { "type": "array", "items": { "type": "string" }, "title": "Denied tables" },
+      "timeoutMs": { "type": "integer", "title": "Statement timeout (ms)", "default": 30000 },
+      "maxRows": { "type": "integer", "title": "Max rows", "default": 10000 }
+    }
+  },
+  "secrets": ["password"],
+  "userCredentials": ["user", "password"],
+  "capabilities": { "dialect": "mssql", "kind": "sql", "introspection": true, "readOnly": true },
+  "server": "server/index.ts",
+  "permissions": ["network:db"]
+}

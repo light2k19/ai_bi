@@ -1,0 +1,15 @@
+{
+  "id": "theme-default",
+  "version": "1.0.0",
+  "type": "theme",
+  "name": "Default theme",
+  "description": "Light and dark design tokens and the matching chart palette.",
+  "author": "ai-bi core",
+  "license": "MIT",
+  "defaultEnabled": true,
+  "capabilities": {
+    "light": { "bg": "#f6f7f9", "surface": "#ffffff", "surface2": "#f1f3f6", "border": "#e3e6ec", "text": "#151a23", "muted": "#5f6b7a", "accent": "#2f6fed", "success": "#1f9d61", "warning": "#d98b0b", "danger": "#d64545" },
+    "dark": { "bg": "#0f1218", "surface": "#171b23", "surface2": "#1e2430", "border": "#2a3140", "text": "#e8ecf2", "muted": "#9aa5b5", "accent": "#5b8cff", "success": "#3cc287", "warning": "#f0a92e", "danger": "#f06a6a" },
+    "palette": ["#2f6fed", "#1fb5a8", "#f0a92e", "#e2577a", "#7c5cdb", "#4caf50", "#ff7a45", "#8c9db5"]
+  }
+}

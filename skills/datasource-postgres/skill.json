@@ -1,0 +1,38 @@
+{
+  "id": "datasource-postgres",
+  "version": "1.0.0",
+  "type": "datasource",
+  "name": "PostgreSQL (read-only)",
+  "description": "Query PostgreSQL 12+ (and compatible engines) with SELECT-only access: every statement runs in a read-only transaction that is always rolled back. Use a dedicated account: CREATE ROLE aibi LOGIN PASSWORD '…'; GRANT CONNECT ON DATABASE db TO aibi; GRANT USAGE ON SCHEMA sales TO aibi; GRANT SELECT ON ALL TABLES IN SCHEMA sales TO aibi; ALTER DEFAULT PRIVILEGES IN SCHEMA sales GRANT SELECT ON TABLES TO aibi; ALTER ROLE aibi SET default_transaction_read_only = on;",
+  "author": "AI BI",
+  "license": "MIT",
+  "multiInstance": true,
+  "defaultEnabled": true,
+  "configSchema": {
+    "type": "object",
+    "properties": {
+      "host": { "type": "string", "title": "Host", "description": "Server host name or IP address" },
+      "port": { "type": "integer", "title": "Port", "default": 5432 },
+      "database": { "type": "string", "title": "Database", "description": "Database name" },
+      "user": { "type": "string", "title": "User", "description": "A SELECT-only role" },
+      "password": { "type": "string", "title": "Password", "format": "password" },
+      "ssl": { "type": "boolean", "title": "Use TLS", "default": false },
+      "sslRejectUnauthorized": { "type": "boolean", "title": "Verify server certificate", "description": "Reject servers whose TLS certificate cannot be verified (only when TLS is on)", "default": true },
+      "allowedSchemas": { "type": "array", "items": { "type": "string" }, "title": "Allowed schemas", "description": "Schemas shown to the AI and allowed in queries (empty = the connection's current schema, usually public)", "default": [] },
+      "deniedTables": { "type": "array", "items": { "type": "string" }, "title": "Denied tables", "description": "table or schema.table; hidden from the AI and blocked in queries", "default": [] },
+      "timeoutMs": { "type": "integer", "title": "Statement timeout (ms)", "default": 30000 },
+      "maxRows": { "type": "integer", "title": "Max rows per query", "default": 10000 }
+    },
+    "required": ["host", "port", "database", "user"]
+  },
+  "secrets": ["password"],
+  "userCredentials": ["user", "password"],
+  "capabilities": {
+    "kind": "sql",
+    "dialect": "postgres",
+    "introspection": true,
+    "readOnly": true
+  },
+  "server": "server/index.ts",
+  "permissions": ["network:db"]
+}

@@ -1,0 +1,34 @@
+{
+  "id": "auth-oidc",
+  "version": "1.0.0",
+  "type": "auth",
+  "name": "OpenID Connect single sign-on",
+  "description": "Sign in with any OIDC provider (Microsoft Entra ID, Google, Keycloak, Okta) using the authorization code flow with PKCE.",
+  "author": "ai-bi core",
+  "license": "MIT",
+  "scope": "system",
+  "configSchema": {
+    "type": "object",
+    "properties": {
+      "providers": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": ["id", "label", "issuer", "clientId"],
+          "properties": {
+            "id": { "type": "string" },
+            "label": { "type": "string" },
+            "issuer": { "type": "string", "description": "e.g. https://login.microsoftonline.com/<tenant>/v2.0 or https://accounts.google.com" },
+            "clientId": { "type": "string" },
+            "clientSecret": { "type": "string", "format": "password" },
+            "scopes": { "type": "string", "default": "openid email profile" },
+            "allowedDomains": { "type": "array", "items": { "type": "string" } },
+            "autoCreateUsers": { "type": "boolean", "default": true }
+          }
+        }
+      }
+    }
+  },
+  "secrets": ["providers.*.clientSecret"],
+  "server": "server/index.ts"
+}

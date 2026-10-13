@@ -1,0 +1,11 @@
+{
+  "id": "transform-core",
+  "version": "1.0.0",
+  "type": "transform",
+  "name": "Core transforms",
+  "description": "In-memory dataset pipeline steps: calc, filter, sort, select, aggregate, pivot, unpivot, join, union, topN, rank, dateTrunc, fillGaps, periodCompare, cumulative, percentOfTotal, movingAverage, limit, distinct.",
+  "author": "ai-bi core",
+  "license": "MIT",
+  "defaultEnabled": true,
+  "server": "server/index.ts"
+}

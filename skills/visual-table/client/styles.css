@@ -1,0 +1,442 @@
+.aibi-table-wrap {
+  --aibi-cell-y: 9px;
+  --aibi-cell-x: 12px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  font-family: var(--font, inherit);
+  font-size: 13px;
+  color: var(--text);
+}
+
+.aibi-table-wrap.aibi-compact {
+  --aibi-cell-y: 5px;
+  --aibi-cell-x: 10px;
+  font-size: 12.5px;
+}
+
+/* toolbar */
+.aibi-table-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 0 10px;
+}
+
+.aibi-table-search {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1;
+  max-width: 280px;
+  color: var(--muted);
+}
+
+.aibi-table-search svg {
+  position: absolute;
+  left: 9px;
+  pointer-events: none;
+}
+
+.aibi-table-search input {
+  width: 100%;
+  height: 30px;
+  padding: 0 10px 0 30px;
+  font: inherit;
+  font-size: 12.5px;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: calc(var(--aibi-r, 8px) * 0.75);
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.aibi-table-search input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
+}
+
+.aibi-table-count {
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+/* scroll area */
+.aibi-table-scroll {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+}
+
+.aibi-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.aibi-table th,
+.aibi-table td {
+  padding: var(--aibi-cell-y) var(--aibi-cell-x);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 360px;
+}
+
+.aibi-table thead th {
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--muted);
+  text-align: left;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  user-select: none;
+}
+
+.aibi-table.aibi-sticky thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.aibi-table.aibi-sticky tfoot td {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+}
+
+.aibi-th-inner {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  max-width: 100%;
+}
+
+.aibi-th-inner.aibi-th-right {
+  flex-direction: row-reverse;
+}
+
+.aibi-th-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.aibi-sortable {
+  cursor: pointer;
+}
+
+.aibi-sortable:hover {
+  color: var(--text);
+}
+
+.aibi-sort-icon {
+  flex: none;
+  fill: currentColor;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.aibi-sortable:hover .aibi-sort-icon,
+.aibi-sort-icon.aibi-sort-on {
+  opacity: 1;
+}
+
+.aibi-sort-on {
+  color: var(--accent);
+}
+
+.aibi-table tbody td {
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 65%, transparent);
+  transition: background-color 0.2s;
+}
+
+.aibi-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.aibi-table tbody tr:hover > td,
+.aibi-table tbody tr:hover > th {
+  background-color: color-mix(in srgb, var(--accent) 5%, transparent);
+}
+
+.aibi-num {
+  font-variant-numeric: tabular-nums;
+}
+
+.aibi-row-click {
+  cursor: pointer;
+}
+
+.aibi-table tbody tr.aibi-row-hl > td {
+  background-color: color-mix(in srgb, var(--accent) 13%, transparent);
+}
+
+.aibi-table tbody tr.aibi-row-hl > td:first-child {
+  box-shadow: inset 3px 0 0 var(--accent);
+}
+
+.aibi-table tbody tr.aibi-row-flash > td {
+  animation: aibi-row-flash 1.4s ease-out;
+}
+
+@keyframes aibi-row-flash {
+  0%,
+  30% {
+    background-color: color-mix(in srgb, var(--warning) 28%, transparent);
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
+.aibi-rownum {
+  width: 44px;
+  color: var(--muted);
+  text-align: right !important;
+  font-size: 11.5px;
+}
+
+/* totals */
+.aibi-table tfoot td {
+  font-weight: 650;
+  background: var(--surface);
+  border-top: 1.5px solid var(--border);
+}
+
+/* groups */
+.aibi-group-row {
+  cursor: pointer;
+}
+
+.aibi-table tbody tr.aibi-group-row > td {
+  font-weight: 600;
+  background: var(--surface2);
+  border-bottom: 1px solid var(--border);
+}
+
+.aibi-group-label {
+  overflow: visible !important;
+}
+
+.aibi-caret {
+  display: inline-block;
+  width: 14px;
+  margin-right: 4px;
+  color: var(--muted);
+  transition: transform 0.15s;
+}
+
+.aibi-caret-open {
+  transform: rotate(90deg);
+}
+
+.aibi-group-count {
+  margin-left: 8px;
+  padding: 1px 7px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--muted);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+}
+
+/* data bars */
+.aibi-cell-bar {
+  position: relative;
+  min-width: 60px;
+}
+
+.aibi-bar {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  height: 76%;
+  max-height: 22px;
+  transform: translateY(-50%);
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--accent) 22%, transparent);
+  transition: width 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.aibi-bar.aibi-bar-neg {
+  background: color-mix(in srgb, var(--danger) 22%, transparent);
+}
+
+.aibi-bar-text {
+  position: relative;
+  padding: 0 2px;
+}
+
+/* deltas */
+.aibi-delta {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 600;
+}
+
+.aibi-delta-arrow {
+  font-size: 0.72em;
+}
+
+.aibi-delta-up {
+  color: var(--success);
+}
+
+.aibi-delta-down {
+  color: var(--danger);
+}
+
+.aibi-delta-flat {
+  color: var(--muted);
+}
+
+/* states */
+.aibi-table-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  min-height: 60px;
+  font-size: 13px;
+  color: var(--muted);
+  text-align: center;
+  padding: 12px;
+}
+
+.aibi-table-nomatch {
+  padding: 28px 12px !important;
+  text-align: center;
+  color: var(--muted);
+}
+
+.aibi-table-more {
+  display: block;
+  width: 100%;
+  margin: 6px 0 2px;
+  padding: 7px;
+  font: inherit;
+  font-size: 12px;
+  color: var(--accent);
+  background: transparent;
+  border: 1px dashed var(--border);
+  border-radius: calc(var(--aibi-r, 8px) * 0.75);
+  cursor: pointer;
+}
+
+.aibi-table-more:hover {
+  background: color-mix(in srgb, var(--accent) 6%, transparent);
+}
+
+/* pager */
+.aibi-table-pager {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 8px;
+  font-size: 12px;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+}
+
+.aibi-pager-btns {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.aibi-pager-btns button {
+  width: 26px;
+  height: 26px;
+  font: inherit;
+  font-size: 14px;
+  line-height: 1;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: calc(var(--aibi-r, 8px) * 0.6);
+  cursor: pointer;
+}
+
+.aibi-pager-btns button:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.aibi-pager-btns button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.aibi-pager-page {
+  min-width: 52px;
+  text-align: center;
+}
+
+/* pivot */
+.aibi-pivot th.aibi-pivot-dim,
+.aibi-pivot td.aibi-pivot-dim {
+  text-align: left;
+  font-weight: 500;
+  color: var(--text);
+  background: var(--surface);
+}
+
+.aibi-pivot thead th.aibi-pivot-dim {
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.aibi-pivot tbody th.aibi-pivot-dim {
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 65%, transparent);
+}
+
+.aibi-pivot tbody th.aibi-pivot-rep {
+  border-bottom-color: transparent;
+}
+
+.aibi-pivot .aibi-pivot-dim:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+}
+
+.aibi-pivot thead .aibi-pivot-dim:first-child,
+.aibi-pivot tfoot .aibi-pivot-dim:first-child {
+  z-index: 3;
+}
+
+.aibi-pivot .aibi-pivot-dim-last {
+  border-right: 1px solid var(--border);
+}
+
+.aibi-pivot .aibi-pivot-total {
+  font-weight: 650;
+  border-left: 1px solid var(--border);
+}
+
+.aibi-pivot tbody td.aibi-pivot-total {
+  background: color-mix(in srgb, var(--surface2) 70%, transparent);
+}
+
+.aibi-pivot-cell {
+  cursor: pointer;
+}
+
+.aibi-pivot-null {
+  color: var(--muted);
+  opacity: 0.6;
+}

@@ -1,0 +1,48 @@
+.aibi-chart {
+  position: relative;
+  width: 100%;
+  min-height: 0;
+  font-family: var(--font, inherit);
+}
+
+.aibi-chart-canvas {
+  position: absolute;
+  inset: 0;
+}
+
+.aibi-chart-empty,
+.aibi-chart-msg {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--muted);
+  pointer-events: none;
+}
+
+.aibi-chart-msg {
+  pointer-events: auto;
+  line-height: 1.45;
+}
+
+.aibi-chart-msg > span:last-child {
+  max-width: 420px;
+}
+
+.aibi-chart-msg-icon {
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--warning);
+  background: color-mix(in srgb, var(--warning) 16%, transparent);
+}

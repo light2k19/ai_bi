@@ -1,0 +1,11 @@
+{
+  "id": "visual-custom",
+  "version": "1.0.0",
+  "type": "visual",
+  "name": "Custom components (TSX)",
+  "description": "React components written by the AI or a builder, compiled in the sandboxed runtime and used as widgets of type custom.<Name>.",
+  "author": "ai-bi core",
+  "license": "MIT",
+  "defaultEnabled": true,
+  "capabilities": { "widgets": [] }
+}

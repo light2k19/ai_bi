@@ -1,0 +1,40 @@
+{
+  "id": "datasource-http",
+  "version": "1.0.0",
+  "type": "datasource",
+  "name": "HTTP / REST API",
+  "description": "Read JSON from a REST API: base URL and auth configured by the admin, the AI chooses path, query and result path. GET and POST (for query-style APIs) only.",
+  "author": "ai-bi core",
+  "license": "MIT",
+  "multiInstance": true,
+  "defaultEnabled": true,
+  "configSchema": {
+    "type": "object",
+    "required": ["baseUrl"],
+    "properties": {
+      "baseUrl": { "type": "string", "title": "Base URL", "description": "e.g. https://api.example.com/v1" },
+      "authType": { "type": "string", "title": "Auth", "enum": ["none", "bearer", "basic", "header", "oauth2_client_credentials"], "default": "none" },
+      "token": { "type": "string", "title": "Bearer token / header value / basic password", "format": "password" },
+      "username": { "type": "string", "title": "Basic auth user" },
+      "headerName": { "type": "string", "title": "Auth header name (for header auth)", "default": "X-API-Key" },
+      "tokenUrl": { "type": "string", "title": "OAuth2 token URL" },
+      "clientId": { "type": "string", "title": "OAuth2 client id" },
+      "clientSecret": { "type": "string", "title": "OAuth2 client secret", "format": "password" },
+      "scope": { "type": "string", "title": "OAuth2 scope" },
+      "headers": { "type": "object", "title": "Default headers", "additionalProperties": { "type": "string" } },
+      "allowPost": { "type": "boolean", "title": "Allow POST (query-style APIs only)", "default": false },
+      "openApiUrl": { "type": "string", "title": "OpenAPI document URL (for introspection)" },
+      "endpoints": {
+        "type": "array",
+        "title": "Documented endpoints (for the AI)",
+        "items": { "type": "object", "properties": { "method": { "type": "string" }, "path": { "type": "string" }, "description": { "type": "string" }, "params": { "type": "object" }, "sample": {} } }
+      },
+      "timeoutMs": { "type": "integer", "title": "Timeout (ms)", "default": 30000 }
+    }
+  },
+  "secrets": ["token", "clientSecret"],
+  "userCredentials": ["username", "token"],
+  "capabilities": { "kind": "http", "introspection": true, "readOnly": true },
+  "server": "server/index.ts",
+  "permissions": ["network:http"]
+}

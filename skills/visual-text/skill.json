@@ -1,0 +1,88 @@
+{
+  "id": "visual-text",
+  "version": "1.0.0",
+  "type": "visual",
+  "name": "Text, narrative and layout",
+  "description": "Markdown text with live bindings, AI-written commentary, images, embeds and tab containers.",
+  "author": "ai-bi core",
+  "license": "MIT",
+  "defaultEnabled": true,
+  "client": "client/index.tsx",
+  "capabilities": {
+    "widgets": [
+      {
+        "type": "text",
+        "title": "Text / markdown",
+        "description": "Markdown with {{ }} bindings. Scope: rows (bound dataset rows), row (first row), data.<datasetId>.rows, filters, page. Pipes: {{ row.revenue | currency }}.",
+        "needsDataset": false,
+        "columnProps": [],
+        "aiHints": "Headings, explanations, callouts, and computed sentences like 'Revenue is {{ row.revenue | compactCurrency }} ({{ row.growth | percent }} vs LY)'.",
+        "handleMethods": ["setText"],
+        "defaultSize": { "w": 12, "h": 3 },
+        "propsSchema": {
+          "type": "object",
+          "required": ["text"],
+          "properties": {
+            "text": { "type": "string" },
+            "align": { "type": "string", "enum": ["left", "center", "right"] },
+            "size": { "type": "string", "enum": ["sm", "md", "lg", "xl"] },
+            "tone": { "type": "string", "enum": ["plain", "info", "success", "warning", "danger"] }
+          }
+        },
+        "example": { "text": "## Q3 review\nRevenue reached **{{ row.revenue | compactCurrency }}**.", "tone": "plain" }
+      },
+      {
+        "type": "narrative",
+        "title": "AI commentary",
+        "description": "Commentary written by the runtime AI from the page's datasets. Stored per data and filter state and reused until the data changes, someone clicks regenerate, or the page is edited. Use for 'what changed and why' summaries for managers.",
+        "needsDataset": false,
+        "columnProps": [],
+        "handleMethods": ["regenerate", "setText"],
+        "defaultSize": { "w": 12, "h": 5 },
+        "propsSchema": {
+          "type": "object",
+          "required": ["prompt"],
+          "properties": {
+            "prompt": { "type": "string", "description": "what to write, e.g. 'Summarise revenue vs target and name the weakest region'" },
+            "datasets": { "type": "array", "items": { "type": "string" }, "description": "datasets to show the AI (default: the bound dataset)" },
+            "maxWords": { "type": "integer" },
+            "auto": { "type": "boolean", "description": "generate automatically when data loads (default true)" },
+            "tone": { "type": "string", "enum": ["plain", "info", "success", "warning", "danger"] }
+          }
+        },
+        "example": { "prompt": "Summarise performance vs target in 3 bullet points; name the best and worst region.", "datasets": ["revenue_by_region"], "maxWords": 120 }
+      },
+      {
+        "type": "image",
+        "title": "Image",
+        "description": "Logo or picture from a page asset (asset:<name>) or an https URL.",
+        "needsDataset": false,
+        "columnProps": [],
+        "defaultSize": { "w": 3, "h": 3 },
+        "propsSchema": { "type": "object", "required": ["src"], "properties": { "src": { "type": "string" }, "alt": { "type": "string" }, "fit": { "type": "string", "enum": ["contain", "cover"] } } },
+        "example": { "src": "asset:logo.svg", "fit": "contain" }
+      },
+      {
+        "type": "embed",
+        "title": "Embedded page",
+        "description": "An external page in a frame (only hosts allowed by the project).",
+        "needsDataset": false,
+        "columnProps": [],
+        "defaultSize": { "w": 6, "h": 8 },
+        "propsSchema": { "type": "object", "required": ["url"], "properties": { "url": { "type": "string" } } },
+        "example": { "url": "https://example.com/report" }
+      },
+      {
+        "type": "tabs",
+        "title": "Tabs container",
+        "description": "Groups widgets into tabs. Put child widgets in the widget's `tabs: [{ title, widgets: [...] }]` (each child has its own grid inside the tab).",
+        "needsDataset": false,
+        "columnProps": [],
+        "handleMethods": ["select"],
+        "defaultSize": { "w": 12, "h": 12 },
+        "propsSchema": { "type": "object", "properties": { "initial": { "type": "integer" } } },
+        "example": {}
+      }
+    ]
+  }
+}

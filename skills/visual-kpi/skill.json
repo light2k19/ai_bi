@@ -1,0 +1,82 @@
+{
+  "id": "visual-kpi",
+  "version": "1.0.0",
+  "type": "visual",
+  "name": "KPI tiles",
+  "description": "Headline numbers with comparison deltas, targets, progress and sparklines; KPI rows.",
+  "author": "ai-bi core",
+  "license": "MIT",
+  "defaultEnabled": true,
+  "client": "client/index.tsx",
+  "capabilities": {
+    "widgets": [
+      {
+        "type": "kpi",
+        "title": "KPI tile",
+        "description": "One headline value with optional comparison (previous period / last year), target progress and sparkline.",
+        "needsDataset": true,
+        "columnProps": ["value", "compare", "target", "sparkline", "sparklineX"],
+        "aiHints": "Put 3–5 KPIs across the top (w=3, h=4 each) or use kpiRow. `aggregate` reduces many rows to one value (sum by default).",
+        "handleMethods": ["countUp", "flash"],
+        "defaultSize": { "w": 3, "h": 4 },
+        "propsSchema": {
+          "type": "object",
+          "required": ["value"],
+          "properties": {
+            "value": { "type": "string", "description": "column holding the value" },
+            "label": { "type": "string" },
+            "format": { "type": "string" },
+            "aggregate": { "type": "string", "enum": ["sum", "avg", "min", "max", "first", "last", "count"] },
+            "compare": { "type": "string", "description": "column with the comparison value (previous period)" },
+            "compareLabel": { "type": "string" },
+            "target": { "anyOf": [{ "type": "string" }, { "type": "number" }], "description": "column or number" },
+            "invert": { "type": "boolean", "description": "lower is better (costs, churn)" },
+            "sparkline": { "type": "string", "description": "column plotted as a trend over rows" },
+            "sparklineX": { "type": "string" },
+            "icon": { "type": "string", "description": "emoji or short symbol" },
+            "color": { "type": "string" },
+            "note": { "type": "string" },
+            "animate": { "type": "boolean", "description": "count up on load (default true)" }
+          }
+        },
+        "example": { "value": "revenue", "label": "Revenue", "format": "compactCurrency", "compare": "ly_revenue", "compareLabel": "vs LY", "target": "target" }
+      },
+      {
+        "type": "kpiRow",
+        "title": "KPI row",
+        "description": "Several KPI tiles in one widget sharing a dataset (one row of totals).",
+        "needsDataset": true,
+        "columnProps": [],
+        "handleMethods": ["countUp", "flash"],
+        "defaultSize": { "w": 12, "h": 4 },
+        "propsSchema": {
+          "type": "object",
+          "required": ["items"],
+          "properties": {
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["value"],
+                "properties": {
+                  "value": { "type": "string" },
+                  "label": { "type": "string" },
+                  "format": { "type": "string" },
+                  "aggregate": { "type": "string" },
+                  "compare": { "type": "string" },
+                  "compareLabel": { "type": "string" },
+                  "target": {},
+                  "invert": { "type": "boolean" },
+                  "sparkline": { "type": "string" },
+                  "icon": { "type": "string" }
+                }
+              }
+            },
+            "animate": { "type": "boolean" }
+          }
+        },
+        "example": { "items": [{ "value": "revenue", "label": "Revenue", "format": "compactCurrency", "compare": "ly_revenue" }, { "value": "margin_pct", "label": "Margin", "format": "percent" }] }
+      }
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "id": "export-excel",
+  "version": "1.0.0",
+  "type": "export",
+  "name": "Excel export",
+  "description": "Export the page's datasets (with current filters) to an .xlsx workbook, one formatted sheet per dataset.",
+  "author": "ai-bi core",
+  "license": "MIT",
+  "defaultEnabled": true,
+  "server": "server/index.ts"
+}

@@ -1,0 +1,7 @@
+{
+  "name": "@aibi/skill-filter-core",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "dependencies": { "@aibi/runtime-api": "0.1.0", "@aibi/page-spec": "0.1.0", "react": "^18.3.1" }
+}

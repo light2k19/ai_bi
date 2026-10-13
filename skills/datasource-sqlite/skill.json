@@ -1,0 +1,23 @@
+{
+  "id": "datasource-sqlite",
+  "version": "1.0.0",
+  "type": "datasource",
+  "name": "SQLite file (read-only)",
+  "description": "Query a SQLite database file stored on the server, opened read-only. Used by the demo project.",
+  "author": "ai-bi core",
+  "license": "MIT",
+  "multiInstance": true,
+  "defaultEnabled": true,
+  "configSchema": {
+    "type": "object",
+    "required": ["file"],
+    "properties": {
+      "file": { "type": "string", "title": "Database file", "description": "File name inside the server's data/sqlite folder, e.g. demo.db" },
+      "maxRows": { "type": "integer", "title": "Max rows", "default": 10000 },
+      "deniedTables": { "type": "array", "items": { "type": "string" }, "title": "Denied tables" }
+    }
+  },
+  "capabilities": { "dialect": "sqlite", "kind": "sql", "introspection": true, "readOnly": true },
+  "server": "server/index.ts",
+  "permissions": ["fs:data"]
+}

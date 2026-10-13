@@ -1,0 +1,21 @@
+{
+  "id": "filter-core",
+  "version": "1.0.0",
+  "type": "filter",
+  "name": "Core filters",
+  "description": "Date range with presets, select, multi-select, search, number range and toggle filters.",
+  "author": "ai-bi core",
+  "license": "MIT",
+  "defaultEnabled": true,
+  "client": "client/index.tsx",
+  "capabilities": {
+    "filters": [
+      { "type": "dateRange", "description": "Date range with presets (today, yesterday, last7d, last30d, last90d, MTD, QTD, YTD, lastMonth, lastQuarter, lastYear, last12m, custom). Exposes start, end, endExclusive, prevStart/prevEnd/prevEndExclusive (previous equal period), lyStart/lyEnd/lyEndExclusive (same period last year), days.", "fields": ["preset", "start", "end", "endExclusive", "prevStart", "prevEnd", "prevEndExclusive", "lyStart", "lyEnd", "lyEndExclusive", "days"], "example": { "id": "date", "type": "dateRange", "label": "Period", "default": { "preset": "YTD" }, "presets": ["MTD", "QTD", "YTD", "last12m", "custom"] } },
+      { "type": "select", "description": "Single choice from static options or a dataset. Exposes value.", "fields": ["value"], "example": { "id": "currency", "type": "select", "label": "Currency", "options": [{ "value": "USD" }, { "value": "EUR" }], "default": "USD" } },
+      { "type": "multiSelect", "description": "Several choices (default 'all'). Exposes values (array), all (boolean), allFlag (1/0). SQL pattern: (:all = 1 OR col IN (:vals)).", "fields": ["values", "all", "allFlag"], "example": { "id": "region", "type": "multiSelect", "label": "Region", "options": { "dataset": "region_list", "value": "region" }, "default": "all" } },
+      { "type": "search", "description": "Free text. Exposes text and like ('%text%').", "fields": ["text", "like"], "example": { "id": "q", "type": "search", "label": "Customer", "placeholder": "Search customer" } },
+      { "type": "numberRange", "description": "Min/max numbers. Exposes min, max (null when open).", "fields": ["min", "max"], "example": { "id": "size", "type": "numberRange", "label": "Deal size", "min": 0 } },
+      { "type": "toggle", "description": "On/off. Exposes on (boolean) and flag (1/0).", "fields": ["on", "flag"], "example": { "id": "incl_internal", "type": "toggle", "label": "Include internal", "default": false } }
+    ]
+  }
+}

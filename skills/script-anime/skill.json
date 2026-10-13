@@ -1,0 +1,11 @@
+{
+  "id": "script-anime",
+  "version": "1.0.0",
+  "type": "script",
+  "name": "Animation helpers",
+  "description": "Web-Animations-based helpers for page scripts (@aibi/anim): animate, stagger, reveal, countUp, typewriter, pulse, highlight, timeline.",
+  "author": "ai-bi core",
+  "license": "MIT",
+  "defaultEnabled": true,
+  "capabilities": { "scriptLibs": [{ "name": "@aibi/anim", "description": "Animation helpers built on the Web Animations API" }] }
+}

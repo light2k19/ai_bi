@@ -1,0 +1,30 @@
+{
+  "id": "datasource-graphql",
+  "version": "1.0.0",
+  "type": "datasource",
+  "name": "GraphQL API (read-only)",
+  "description": "Read data from any GraphQL endpoint with query operations only (no mutations or subscriptions).",
+  "multiInstance": true,
+  "defaultEnabled": true,
+  "configSchema": {
+    "type": "object",
+    "required": ["baseUrl"],
+    "properties": {
+      "baseUrl": { "type": "string", "title": "GraphQL endpoint URL", "description": "Full URL of the GraphQL endpoint, e.g. https://api.example.com/graphql. Requests are always POSTed here." },
+      "authType": { "type": "string", "title": "Auth", "enum": ["none", "bearer", "basic", "header", "oauth2_client_credentials"], "default": "none" },
+      "token": { "type": "string", "title": "Bearer token / header value / basic password", "format": "password" },
+      "username": { "type": "string", "title": "Basic auth user" },
+      "headerName": { "type": "string", "title": "Auth header name (for header auth)", "default": "X-API-Key" },
+      "tokenUrl": { "type": "string", "title": "OAuth2 token URL" },
+      "clientId": { "type": "string", "title": "OAuth2 client id" },
+      "clientSecret": { "type": "string", "title": "OAuth2 client secret", "format": "password" },
+      "scope": { "type": "string", "title": "OAuth2 scope" },
+      "timeoutMs": { "type": "integer", "title": "Timeout (ms)", "default": 30000 }
+    }
+  },
+  "secrets": ["token", "clientSecret"],
+  "userCredentials": ["username", "token"],
+  "capabilities": { "kind": "other", "introspection": true, "readOnly": true },
+  "server": "server/index.ts",
+  "permissions": ["network:http"]
+}

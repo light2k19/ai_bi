@@ -1,0 +1,33 @@
+{
+  "id": "datasource-oracle",
+  "version": "1.0.0",
+  "type": "datasource",
+  "name": "Oracle Database (read-only)",
+  "description": "Query Oracle 12c+ (thin mode, no Instant Client) inside SET TRANSACTION READ ONLY, always rolled back, with row and time limits.",
+  "author": "ai-bi core",
+  "license": "MIT",
+  "multiInstance": true,
+  "defaultEnabled": true,
+  "configSchema": {
+    "type": "object",
+    "required": ["user"],
+    "properties": {
+      "host": { "type": "string", "title": "Host" },
+      "port": { "type": "integer", "title": "Port", "default": 1521 },
+      "serviceName": { "type": "string", "title": "Service name (e.g. FREEPDB1, ORCLPDB1)" },
+      "connectString": { "type": "string", "title": "Connect string (overrides host/port/service), e.g. host:1521/service or a TNS descriptor" },
+      "user": { "type": "string", "title": "User (SELECT-only account)" },
+      "password": { "type": "string", "title": "Password", "format": "password" },
+      "allowedSchemas": { "type": "array", "items": { "type": "string" }, "title": "Schemas (owners) to expose; empty = the user's own schema" },
+      "deniedTables": { "type": "array", "items": { "type": "string" }, "title": "Denied tables" },
+      "lowercaseColumns": { "type": "boolean", "title": "Lower-case UPPER-CASE column names in results", "default": true },
+      "timeoutMs": { "type": "integer", "title": "Statement timeout (ms)", "default": 30000 },
+      "maxRows": { "type": "integer", "title": "Max rows", "default": 10000 }
+    }
+  },
+  "secrets": ["password"],
+  "userCredentials": ["user", "password"],
+  "capabilities": { "dialect": "oracle", "kind": "sql", "introspection": true, "readOnly": true },
+  "server": "server/index.ts",
+  "permissions": ["network:db"]
+}
